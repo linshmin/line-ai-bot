@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: line-ai-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: LINE_CHANNEL_ACCESS_TOKEN
+        sync: false
+      - key: LINE_CHANNEL_SECRET
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: REDIS_URL
+        value: redis://default:$(REDIS_PASSWORD)@$(REDIS_HOST):$(REDIS_PORT)
+      - key: EMBEDDING_MODEL
+        value: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+      - key: APP_HOST
+        value: 0.0.0.0
+      - key: APP_PORT
+        value: 8000
+      - key: DEBUG
+        value: false
+
+databases:
+  - name: redis
+    databaseName: line_ai_bot_redis
+    user: line_ai_bot
